@@ -6,8 +6,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "structures.h"
-#include "structure_graphe.h"
+#include "utils_sd.h"
+#include "lecture_csv.h"
+#include "condorcet_schulzes.h"
+#include "condorcet_paires.h"
 #include <stdbool.h>
 
 //TODO : recuperer les noms depuis le fichiers csv 
@@ -19,56 +21,6 @@ int calculerNbArcsMax(int nb_candidats){
         nb_arcs += i;
     }
     return nb_arcs;
-}
-
-void trierGraphe(ListeArcs * graphe) {
-    ListeArcs graphe_trie = creerListeArcs();
-    int t = graphe->taille;
-    for (int i=0; i<t; i++) {
-        int poidsMax = graphe->debut->poids;
-        Arc *arcVainqueur = graphe->debut;
-        Arc *p = graphe->debut;
-        while (p != NULL) {
-            if (p->poids>poidsMax) {
-                poidsMax = p->poids;
-                arcVainqueur = p;
-            }
-            p = p->suivant;
-        }
-        ajouterArc(&graphe_trie, arcVainqueur);
-        retirerArc(graphe, arcVainqueur);
-    }
-    graphe->debut = graphe_trie.debut;
-}
-
-bool creeCycle(ListeArcs *grapheCondorcet, Arc* arc) {
-    // renvoie true si lors du parcours du graphe depuis le sommet destination de l'arc, on tombe sur le sommet source de l'arc
-    int sommetDest = arc->sommetArrivee;
-    int sommetDepart= arc->sommetDepart;
-
-    if (estDansGraphe(grapheCondorcet, sommetDest)) {
-        ListeArcs arcsAVerifier = creerListeArcs();
-        ajouterArcSommet(grapheCondorcet, &arcsAVerifier, sommetDest);
-        Arc* e = arcsAVerifier.debut;
-        while (e!=NULL) {
-            if (e->sommetArrivee == sommetDepart)
-                // il y a un cycle
-                return true;
-            ajouterArcSommet(grapheCondorcet, &arcsAVerifier, e->sommetArrivee);
-            e = e->suivant;
-        }
-    }
-    return false;
-}
-
-void ajouterArcsSansCycle(ListeArcs *grapheCondorcet,ListeArcs* listeArcsTries) {
-    Arc* arc = listeArcsTries->debut;
-    while (arc!=NULL) {
-        if(!creeCycle(grapheCondorcet, arc)) {
-            ajouterArc(grapheCondorcet, arc);
-        }
-        arc = arc->suivant;
-    }
 }
 
 bool estDansTab(int * tab, int sommet, int taille){
@@ -121,87 +73,52 @@ int trouverVainqueurCondorcet(ListeArcs grapheCondorcet) {
 void obtenirGraphe(const char* fichier, ListeArcs * graphe) {
     // obtenir liste arcs et matrice duels
     t_mat_char_star_dyn mat;
-    initMatrice(&mat, LIGNES, COLONNES);
+    
+    int l = 0;
+    int c = 0;
+    compter_lignes_colonnes_csv(fichier, &l, &c);
+    initMatrice(&mat, l, c);
     lecture_csv_score_condorcet(fichier, &mat, LIGNES, COLONNES);
     MatriceDuel matriceDuels = creerMatriceDuel(MAX_CANDIDATS, MAX_CANDIDATS);
     remplirMatriceDuel(&mat, &matriceDuels);
     creerListeArcsDepuisMatrice(matriceDuels, MAX_CANDIDATS, graphe);
 }
 
-void obtenirGraphePaire(const char* fichier, ListeArcs * graphe) {
-
-    // obtenir liste arcs et matrice duels
-    t_mat_char_star_dyn mat;
-    initMatrice(&mat, LIGNES, COLONNES);
-    lecture_csv_score_condorcet(fichier, &mat, LIGNES, COLONNES);
-    MatriceDuel matriceDuels = creerMatriceDuel(MAX_CANDIDATS, MAX_CANDIDATS);
-    remplirMatriceDuel(&mat, &matriceDuels);
-    creerListeArcsDepuisMatrice(matriceDuels, MAX_CANDIDATS, graphe);
-
-    // trier graphe
-    trierGraphe(graphe);
-
-    // ajout des arcs un par un sans cycle
+void condorcet(const char * fichier, int methodeParadoxe) {
     ListeArcs grapheCondorcet = creerListeArcs();
-    ajouterArcsSansCycle(&grapheCondorcet, graphe);
+    obtenirGraphe(fichier, &grapheCondorcet);
 
-    graphe = &grapheCondorcet;
+    int vainqueur = trouverVainqueurCondorcet(grapheCondorcet);
+    printf("Mode de scrutin : Condorcet\n");
+    if (vainqueur != -1) {
+        printf("\tLe vainqueur de condorcet est : %s\n", noms[vainqueur]);
+        return;
+    }
+    printf("PARADOXE DE CONDORCET\n");
+    ListeArcs grapheCondorcetParadoxe = creerListeArcs();
+    switch (methodeParadoxe) {
+        case 0: // paire
+            printf("Résolution du paradoxe par la méthode des paires\n");
+            obtenirGraphePaire(fichier, &grapheCondorcetParadoxe);
+            int vainqueur = trouverVainqueurCondorcet(grapheCondorcet);
+            printf("\tLe vainqueur de condorcet est : %s\n", noms[vainqueur]);
+            break;
+        case 1: // schulzes
+            obtenirGraphe(fichier, &grapheCondorcetParadoxe);
+            schulzes(&grapheCondorcet);
+            break;
+        case 2: //minimax
+            // todo Salim
+            break;
+    }
 }
 
-void testCreationSansCycle() {
-    ListeArcs grapheCondorcet = creerListeArcs();
-    Arc a, b, c, d, e;
-    a.sommetDepart = 1;
-    a.sommetArrivee = 0;
-    a.poids = 10;
-    
-    b.sommetDepart = 0;
-    b.sommetArrivee = 2;
-    b.poids = 9;
-    
-    c.sommetDepart = 2;
-    c.sommetArrivee = 1;
-    c.poids = 8;
-    
-    d.sommetDepart = 3;
-    d.sommetArrivee = 1;
-    d.poids = 7;
-    
-    e.sommetDepart = 0;
-    e.sommetArrivee = 2;
-    e.poids = 6;
-
-    ajouterArc(&grapheCondorcet, &a);
-    ajouterArc(&grapheCondorcet, &b);
-    ajouterArc(&grapheCondorcet, &c);
-    ajouterArc(&grapheCondorcet, &d);
-    //ajouterArc(&grapheCondorcet, &e);
-
-    ListeArcs graphe2 = creerListeArcs();
-
-    ajouterArcsSansCycle(&graphe2, &grapheCondorcet);
-    afficherListeArcs(&graphe2);
-}
-
+/*
 int main(int argc, const char* argv[]) {
+
     if (argc != 2) {
         printf("Usage: %s <fichier_condorcet>\n", argv[0]);
         exit(2);
-    }
-
-    // renvoie un tableau d'arc représentant les résultats des duels entre chaque candidats
-    ListeArcs grapheCondorcet = creerListeArcs();
-    obtenirGraphe(argv[1], &grapheCondorcet);
-    
-    int vainqueur = trouverVainqueurCondorcet(grapheCondorcet);
-
-    printf("Mode de scrutin : Condorcet\n");
-
-    if (vainqueur == -1) {
-        printf("PAS DE VAINQUEUR DE CONDORCET ...\n");
-    }
-    else {
-        printf("\tLe vainqueur de condorcet est : %s\n", noms[vainqueur]);
-    }
-    return 0;
-}
+    }   
+    condorcet(argv[1], 0);
+}*/

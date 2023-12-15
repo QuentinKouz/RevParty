@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "structures.h"
+//#include "structures.h"
 #include "lecture_csv.h"
 #include "utils_sd.h"
 
@@ -27,7 +27,7 @@ void lecture_csv_votant(const char *nom_fichier, votant *votants[MAX_VOTANTS]) {
     int num_etu;
     char key[50];
     while (fgets(line, sizeof(line), file)) {
-        if (sscanf(line, "%d %s", &num_etu, &key) == 2) {
+        if (sscanf(line, "%d %50s", &num_etu, key) == 2) {
           votants[votants_count]->num_etu = num_etu;
           strcpy(votants[votants_count]->key, key);
           votants_count++;
@@ -97,6 +97,34 @@ void lecture_csv_verifyMyVote(char* nom_fichier, votant* votants[MAX_VOTANTS], v
 }
 
 /************************************----------CONDORCET----------*****************************************/
+void compter_lignes_colonnes_csv(const char * nom_fichier, int * lignes, int * colonnes) {
+    char ligne[1000];
+    char *token;
+
+    FILE * fichier = fopen(nom_fichier, "r");
+
+    if (fichier == NULL) {
+        printf("Impossible d'ouvrir le fichier.\n");
+        return;
+    }
+
+    // Compter les lignes et déterminer le nombre de colonnes
+    while (fgets(ligne, sizeof(ligne), fichier) != NULL) {
+        (*lignes)++;
+
+        // Utilisation de strtok pour compter les virgules (séparateurs de colonnes)
+        token = strtok(ligne, ",");
+        while (token != NULL) {
+            (*colonnes)++;
+            token = strtok(NULL, ",");
+        }
+    }
+
+    // Soustraire 1 pour corriger le comptage de la dernière ligne
+    (*colonnes) = (*colonnes) / (*lignes) - 1;
+    fclose(fichier);
+}
+
 void lecture_csv_score_condorcet(const char *nom_fichier, t_mat_char_star_dyn *matrice, int ligne, int colonne) {
     FILE *fichier = fopen(nom_fichier, "r");
 
@@ -105,7 +133,7 @@ void lecture_csv_score_condorcet(const char *nom_fichier, t_mat_char_star_dyn *m
         exit(EXIT_FAILURE);
     }
 
-    char buffer[MAX_LIGNE_TAILLE];
+    char buffer[MAX_LINE_LENGTH];
 
     // Allouer mémoire pour les pointeurs de lignes
     matrice->vote = (char ***)malloc(ligne * sizeof(char **));

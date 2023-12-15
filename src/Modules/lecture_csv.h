@@ -12,6 +12,6 @@ void lecture_csv_verifyMyVote(char* nom_fichier, votant* votants[MAX_VOTANTS], v
 
 void lecture_csv_score_condorcet(const char *nom_fichier, t_mat_char_star_dyn *matrice, int ligne, int colonne);
 
-
+void compter_lignes_colonnes_csv(const char * nom_fichier, int * lignes, int * colonnes);
 
 #endif // LECTURE_CSV_H

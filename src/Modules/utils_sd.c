@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "structure_graphe.h"
+//#include "structure_graphe.h"
 #include "utils_sd.h"
 
 /************************************----------CANDIDATS----------*****************************************/

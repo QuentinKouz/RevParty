@@ -6,6 +6,8 @@
 #ifndef UTILS_SD_H
 #define UTILS_SD_H
 
+#include <stdbool.h>
+
 /// \def LONGUEUR_JUGEMENT
 #define LONGUEUR_JUGEMENT 24
 
@@ -20,16 +22,27 @@
 
 /// \def MAX_LINE_LENGTH
 /// \brief Longueur maximale d'une ligne dans un fichier.
-#define MAX_LINE_LENGTH 2048
+#define MAX_LINE_LENGTH 1024
 
 /// \def MAX_VOTANTS
 /// \brief Nombre maximal de votants.
 #define MAX_VOTANTS 100
 
+/// \def MAX_CANDIDATS
+/// \brief Nombre maximal de candidats.
+#define MAX_CANDIDATS 10
 
 /// \def MAX_VOTES
 /// \brief Nombre maximal de votes.
 #define MAX_VOTES 100
+
+/// \def LIGNES
+/// \brief Nombre maximal de lignes.
+#define LIGNES 100
+
+/// \def COLONNES
+/// \brief Nombre maximal de colonnes.
+#define COLONNES 100
 
 /// \struct votant
 /// \brief Structure représentant un votant.
@@ -65,8 +78,8 @@ typedef struct {
 /// @var Candidat score
 /// Score total du candidat.
 typedef struct {
-    char nom[50];
     int indice;
+    char nom[50];
     int score;
 } Candidat;
 

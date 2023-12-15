@@ -2,8 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "structures.h"
-#include "structure_graphe.h"
+#include "utils_sd.h"
 #include <stdbool.h>
 
 // schulzes **************************************
@@ -24,13 +23,19 @@ bool estDedans(Arc * arc, ListeArcs * listeArcs) {
 }
 
 int min(ListeArcs * listeArcs) {
+    printf("ok1\n");
     Arc * e = listeArcs->debut;
+    printf("ok11\n");
     int minimum = e->poids;
+    printf("ok12\n");
     while (e!=NULL) {
+        printf("ok13\n");
         if (e->poids < minimum){
             minimum = e->poids;
         }
+        printf("ok14\n");
         e = e->suivant;
+        printf("ok15\n");
     }
     return minimum;
 }
@@ -64,15 +69,23 @@ ListeArcs *trouverCheminFortAetB(ListeArcs *graphe, int A, int B, ListeArcs * ch
     return NULL;
 }
 
-void trouverCheminsForts(ListeArcs * graphe, ListeDeListeArcs * listeCheminsForts, int * listeCandidats, int nbCandidats) {
+void trouverCheminsForts(ListeArcs * graphe, ListeDeListeArcs * listeCheminsForts, Candidat * listeCandidats, int nbCandidats) {
     for (int i=0; i<nbCandidats; i++) {
         for (int j=0; j<nbCandidats; j++) {
             if (i!=j) {
                 ListeArcs* cheminFort = malloc(sizeof(ListeArcs));
+                printf("ok1\n");
                 *cheminFort = creerListeArcs();
-                cheminFort = trouverCheminFortAetB(graphe, listeCandidats[i], listeCandidats[j], cheminFort);
-                cheminFort->poids = min(cheminFort);
-                ajouterListeArc(listeCheminsForts, cheminFort);              
+                printf("o2\n");
+                cheminFort = trouverCheminFortAetB(graphe, listeCandidats[i].indice, listeCandidats[j].indice, cheminFort);
+                printf("ok3\n");
+                if (cheminFort!=NULL) {
+                    cheminFort->poids = min(cheminFort);
+                    printf("ok4\n");
+                    ajouterListeArc(listeCheminsForts, cheminFort);   
+                }
+                      
+                printf("ok5\n");         
             }
         }
     }
@@ -108,10 +121,14 @@ int trouverVainqueurSchulzes(ListeDeListeArcs listeCheminsForts, int nbCandidats
 // methode à appeler pour faire schulzes
 void schulzes(ListeArcs * graphe) {
     ListeDeListeArcs listeCheminsForts = creerListeDeListeArcs();
-    int candidats[] = {0, 1, 2, 3};
-    trouverCheminsForts(graphe, &listeCheminsForts, candidats, 4);
+    // todo: recuperer dans le fichier csv
+    Candidat candidats[MAX_CANDIDATS] = {
+        {0, "BBP"}, {1, "BSO"}, {2, "Thai"}, {3, "Veggie"}, {4, "FireC"},
+        {5, "Roma"}, {6, "Crispy"}, {7, "Cheese"}, {8, "BS"}, {9, "Country"},
+    };
+    trouverCheminsForts(graphe, &listeCheminsForts, candidats, MAX_CANDIDATS);
     afficherListeDeListeArcs(&listeCheminsForts);
-    int v = trouverVainqueurSchulzes(listeCheminsForts, 4);
+    int v = trouverVainqueurSchulzes(listeCheminsForts, MAX_CANDIDATS);
     if (v==-1) {
         printf("ERREUR: Pas de vainqueur de schulzes\n");
         return;
