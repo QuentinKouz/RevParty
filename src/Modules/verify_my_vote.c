@@ -71,13 +71,13 @@ int main(int argc, char * argv[]) {
     int len_data;
     BYTE *data = (char* )malloc(sizeof(strlen(argv[2]) * sizeof(char))); // clé
     char hash[SHA256_BLOCK_SIZE*2 + 1];
-    char fichier_votant_jugement[] = "./ResultatsVote/codeJugementNumEtu.csv";
-    char fichier_votant_condorcet[] = "./ResultatsVote/codeCondorcetNumEtu.csv";
+    char fichier_votant_jugement[] = "../ResultatsVote/codeJugementNumEtu.csv";
+    char fichier_votant_condorcet[] = "../ResultatsVote/codeCondorcetNumEtu.csv";
     votant* votant_jugement[LONGUEUR_JUGEMENT];
     votant* votant_condorcet[LONGUEUR_CONDORCET];
     int type_vote = AUCUN;
-    char fichier_resultat_jugement[] = "./ResultatsVote/voteJugement.csv";
-    char fichier_resultat_condorcet[] = "./ResultatsVote/VoteCondorcet.csv";
+    char fichier_resultat_jugement[] = "../ResultatsVote/voteJugement.csv";
+    char fichier_resultat_condorcet[] = "../ResultatsVote/VoteCondorcet.csv";
     int nb_lignes_vote;
     char * fichier;
 
