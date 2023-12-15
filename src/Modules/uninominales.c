@@ -193,7 +193,3 @@ void uninominales(const char *nomFichier, int nbTours) {
 
     printf("\tDeuxième tour : vainqueur = %s (%.2f%%)\n\n", vainqueur.nom, (float) ((float) vainqueur.score/((float) vainqueurs[0].score + vainqueurs[1].score))*100);
 }
-
-int main (int argc, const char * argv[]) {
-    uninominales(argv[1], 2);
-}
