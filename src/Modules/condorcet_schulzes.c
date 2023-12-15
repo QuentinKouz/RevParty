@@ -1,3 +1,7 @@
+/// \file condorcet_schulzes.c
+/// \brief Programme d'implémentation calculant le vainqueur de condorcet schulzes
+/// \author Equipe-2 : Salim Moussaoui, Maxime Cherraf, Quentin Kouzmitch, Nicolas Giry
+/// \date 15 decembre 2023
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -65,7 +69,6 @@ ListeArcs *trouverCheminFortAetB(ListeArcs *graphe, int A, int B, ListeArcs * ch
         }
         arcCourant = arcCourant->suivant;
     }
-
     return NULL;
 }
 

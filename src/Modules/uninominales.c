@@ -1,5 +1,5 @@
 /// \file uninominales.c
-/// \brief Programme d'implémentation de la méthode uninominal à un tour.
+/// \brief Programme d'implémentation de la méthode uninominal à un tour ou deux tours selon le paramètre.
 /// \author Equipe-2 : Salim Moussaoui, Maxime Cherraf, Quentin Kouzmitch, Nicolas Giry
 /// \date 9 novembre 2023
 
@@ -65,6 +65,12 @@ Candidat trouverVainqueur(Candidat candidats[], int nbCandidats, unsigned * indi
 /// @brief Détermine le vainqueur basé sur les données du fichier spécifié.
 /// @param[in] nomFichier Nom du fichier contenant les résultats du vote.
 void uninominales(const char *nomFichier, int nbTours) {
+
+    if (nbTours !=1 && nbTours !=2) {
+        fprintf(stderr,"Erreur paramètres de fonction\n");
+        exit(1);
+    }
+
     char cheminComplet[100];
     sprintf(cheminComplet, "%s", nomFichier);
 

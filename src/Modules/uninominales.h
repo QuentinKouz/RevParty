@@ -8,6 +8,6 @@
 
 #include "utils_sd.h"
 
-void uninominales(const char *nomFichier);
+void uninominales(const char *nomFichier, int nbTours);
 
 #endif // UNINOMINALES_H

@@ -1,7 +1,7 @@
-/// \file condorcet.c
-/// \brief Programme d'implémentation calculant le vainqueur de condorcet s'il existe
+/// \file condorcet_paires.c
+/// \brief Programme d'implémentation calculant le vainqueur de condorcet paire
 /// \author Equipe-2 : Salim Moussaoui, Maxime Cherraf, Quentin Kouzmitch, Nicolas Giry
-/// \date 5 decembre 2023
+/// \date 15 decembre 2023
 
 #include <stdio.h>
 #include <stdlib.h>

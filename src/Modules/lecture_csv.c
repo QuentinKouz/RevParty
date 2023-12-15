@@ -1,7 +1,11 @@
+/// \file lecture_csv.c
+/// \brief Programme de lecture csv
+/// \author Equipe-2 : Salim Moussaoui, Maxime Cherraf, Quentin Kouzmitch, Nicolas Giry
+/// \date 5 decembre 2023
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include "structures.h"
 #include "lecture_csv.h"
 #include "utils_sd.h"
 
