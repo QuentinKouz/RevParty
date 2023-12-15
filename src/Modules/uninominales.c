@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "utils_sd.h"
 
 #define MAX_CANDIDATS 10
 #define MAX_VOTANTS 100
@@ -63,9 +64,9 @@ Candidat trouverVainqueur(Candidat candidats[], int nbCandidats, unsigned * indi
 /// @fn void uninominales(const char *nomFichier)
 /// @brief Détermine le vainqueur basé sur les données du fichier spécifié.
 /// @param[in] nomFichier Nom du fichier contenant les résultats du vote.
-void uninominales(const char *nomFichier) {
+void uninominales(const char *nomFichier, int nbTours) {
     char cheminComplet[100];
-    sprintf(cheminComplet, "ResultatsVote/%s", nomFichier);
+    sprintf(cheminComplet, "%s", nomFichier);
 
     FILE *fichier = fopen(cheminComplet, "r");
     if (!fichier) {
@@ -141,6 +142,12 @@ void uninominales(const char *nomFichier) {
     scores[0] = ((float)vainqueurs[0].score / (float)(nbVotes)) * 100;
     scores[1] = ((float)vainqueurs[1].score / (float)(nbVotes)) * 100;
 
+    if (nbTours == 1) {
+        printf("Mode de scrutin : uninominal à 1 tour, %d candidats, %d votants\n", MAX_CANDIDATS, nbVotants-1);
+        printf("\tVainqueur = %s (%.2f%%)\n", vainqueurs[0].nom, scores[0]);
+        return;
+    } 
+
     printf("Mode de scrutin : uninominal à deux tours, %d candidats, %d votants\n", MAX_CANDIDATS, nbVotants-1);
 
     printf("\tPremier tour : vainqueurs = %s (%.2f%%), %s (%.2f%%)\n", vainqueurs[0].nom, scores[0], vainqueurs[1].nom, scores[1]);
@@ -185,4 +192,8 @@ void uninominales(const char *nomFichier) {
     }
 
     printf("\tDeuxième tour : vainqueur = %s (%.2f%%)\n\n", vainqueur.nom, (float) ((float) vainqueur.score/((float) vainqueurs[0].score + vainqueurs[1].score))*100);
+}
+
+int main (int argc, const char * argv[]) {
+    uninominales(argv[1], 2);
 }
