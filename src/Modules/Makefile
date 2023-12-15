@@ -1,5 +1,6 @@
 CC = gcc
 CFLAGS = -w -std=c99 -pedantic -Wall
+EXEC_DIR = ../Executables
 
 UTILS_SD_SOURCES = utils_sd.c
 LISTE_SOURCES = element_liste.c liste.c
@@ -25,13 +26,13 @@ VOTE_OBJECTS = $(VOTE_SOURCES:.c=.o)
 all: main verify_my_vote
 
 main: $(COMMON_OBJECTS) $(MAIN_OBJECTS)
-	$(CC) $(COMMON_OBJECTS) $(MAIN_OBJECTS) -o $@
+	$(CC) $(COMMON_OBJECTS) $(MAIN_OBJECTS) -o $(EXEC_DIR)/$@
 
 verify_my_vote: $(VERIFY_MY_VOTE_OBJECTS) $(VOTE_OBJECTS)
-	$(CC) $(VERIFY_MY_VOTE_OBJECTS) $(VOTE_OBJECTS) -o $@
+	$(CC) $(VERIFY_MY_VOTE_OBJECTS) $(VOTE_OBJECTS) -o $(EXEC_DIR)/$@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f main verify_my_vote $(COMMON_OBJECTS) $(MAIN_OBJECTS) $(VERIFY_MY_VOTE_OBJECTS)
+	rm -f $(EXEC_DIR)/main $(EXEC_DIR)/verify_my_vote $(COMMON_OBJECTS) $(MAIN_OBJECTS) $(VERIFY_MY_VOTE_OBJECTS)
