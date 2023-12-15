@@ -83,6 +83,14 @@ typedef struct {
     int score;
 } Candidat;
 
+typedef struct {
+    int indice;
+    char nom[50];
+    int score[6];
+    float pourcentage[6];
+    int mediane;
+} Candidat_mention;
+
 // Structure pour stocker la matrice de chaînes de caractères dynamique
 typedef struct {
     char ***vote;  // Tableau de pointeurs vers des chaînes de caractères

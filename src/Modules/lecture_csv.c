@@ -157,3 +157,7 @@ void lecture_csv_score_condorcet(const char *nom_fichier, t_mat_char_star_dyn *m
 
     fclose(fichier);
 }
+
+void lecture_csv_jugement(const char *nom_fichier, Candidat_mention ** candidats, int nb_candidats, int nb_electeurs) {
+    //TODO
+}
