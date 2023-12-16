@@ -59,7 +59,7 @@ void ajouterArcTest(ListeArcs *graphe, int depart, int arrivee, int poids) {
 }
 
 
-int main(void) {
+/*int main(void) {
     ListeArcs graphe = creerListeArcs();
 
     // Ajouter des arcs de test
@@ -85,10 +85,10 @@ int main(void) {
         Le pire score est 20 (contre Candidat 1).
         
     Dans la méthode Minimax, le vainqueur est celui avec le plus petit "pire score". Dans ce cas, c'est le Candidat 0 avec un score de 5.
-    */
+    
     minimax(&graphe, 3);  // On suppose qu'il y a 3 candidats
 
     libererListeArcs(&graphe);
 
     return 0;
-}
+}*/

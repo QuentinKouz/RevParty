@@ -158,6 +158,59 @@ void lecture_csv_score_condorcet(const char *nom_fichier, t_mat_char_star_dyn *m
     fclose(fichier);
 }
 
-void lecture_csv_jugement(const char *nom_fichier, Candidat_mention ** candidats, int nb_candidats, int nb_electeurs) {
-    //TODO
+void lecture_csv_jugement(const char *nom_fichier, Candidat_mention **candidats, int nb_candidats, int nb_electeurs) {
+    FILE *fichier = fopen(nom_fichier, "r");
+    if (fichier == NULL) {
+        perror("Erreur lors de l'ouverture du fichier");
+        exit(EXIT_FAILURE);
+    }
+
+    char ligne[1024];
+    // on ignore la première ligne
+    if (fgets(ligne, sizeof(ligne), fichier) == NULL) {
+        fprintf(stderr, "Le fichier est vide.\n");
+        fclose(fichier);
+        exit(EXIT_FAILURE);
+    }
+
+    *candidats = (Candidat_mention *)malloc(nb_candidats * sizeof(Candidat_mention));
+    if (*candidats == NULL) {
+        perror("Erreur d'allocation de mémoire");
+        fclose(fichier);
+        exit(EXIT_FAILURE);
+    }
+
+    const char *noms_burgers[] = {
+        "Burger Black Pepper",
+        "Burger Sud-Ouest",
+        "Thai Burger",
+        "Veggie Burger",
+        "Fire cracker",
+        "Roma",
+        "Crispy",
+        "Cheese Burger",
+        "Burger surprise",
+        "Country"
+    };
+
+    for (int i = 0; i < nb_candidats; i++) {
+        // Copiez le nom dans le champ 'nom' de la structure
+        strncpy((*candidats)[i].nom, noms_burgers[i], sizeof((*candidats)[i].nom));
+    }
+
+    while (fgets(ligne, sizeof(ligne), fichier)) {
+        char *valeurVote = strtok(ligne, ",");
+        for (int i = 0; i < 3; i++) {
+            valeurVote = strtok(NULL, ",");
+        }
+        for (int i = 0; i < nb_candidats; i++) {
+            valeurVote = strtok(NULL, ",");
+            int vote = atoi(valeurVote);
+            
+            if (vote != -1) {
+                (*candidats)[i].score[vote-1]++;
+            }
+        }
+    }
+    fclose(fichier);
 }
