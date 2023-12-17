@@ -74,16 +74,24 @@ int calculerMediane(Candidat_mention candidat, int nb_electeurs) {
 void jugement_majoritaire(char * nom_fichier) {
     int nb_electeurs, nb_candidats;
     compter_lignes_colonnes_csv(nom_fichier, &nb_electeurs, &nb_candidats);
-
-    Candidat_mention candidats[nb_candidats];
-
+    Candidat_mention * candidats;
+    
+    nb_candidats-=3;
+    nb_electeurs-=1;
+    
     lecture_csv_jugement(nom_fichier, &candidats, nb_candidats, nb_electeurs);
+    afficher_score_jugement(candidats, nb_candidats);
 
     // remplir les pourcentages
     for (int j=0; j<nb_candidats; j++){
         for (int i=0; i<6; i++) {
-            candidats[j].pourcentage[i] = 100*(candidats[j].score[i] / nb_electeurs);
+            candidats[j].pourcentage[i] = 100.0*(candidats[j].score[i] /(float) nb_electeurs);
+            
+            
+            printf("nom : %s\t\tpourcentage : %.2f%%\n",candidats[j].nom,candidats[j].pourcentage[i]);
         }
+        
+        
         candidats[j].mediane = calculerMediane(candidats[j], nb_electeurs);
     }
 

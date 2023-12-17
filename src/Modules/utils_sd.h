@@ -166,5 +166,6 @@ void afficherListeDeListeArcs (ListeDeListeArcs * liste);
 
 int weight_at(ListeDeListeArcs* liste, int ind);
 
+void afficher_score_jugement(const Candidat_mention *candidats, int nb_candidats);
 
 #endif // UTILS_SD_H

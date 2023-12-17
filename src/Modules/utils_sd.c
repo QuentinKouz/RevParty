@@ -360,3 +360,14 @@ int weight_at(ListeDeListeArcs* liste, int ind) {
     printf("indice trop grand\n");
     return -1;
 }
+
+void afficher_score_jugement(const Candidat_mention *candidats, int nb_candidats) {
+    for (int i = 0; i < nb_candidats; i++) {
+        printf("Nom: %s\n", candidats[i].nom);
+        printf("Scores: ");
+        for (int j = 0; j < 6; j++) {
+            printf("%d ", candidats[i].score[j]);
+        }
+        printf("\n\n");
+    }
+}
