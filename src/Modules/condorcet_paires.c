@@ -58,8 +58,8 @@ void obtenirGraphePaire(const char* fichier, ListeArcs * graphe) {
     trierGraphe(graphe);
 
     // ajout des arcs un par un sans cycle
-    ListeArcs grapheCondorcet = creerListeArcs();
-    ajouterArcsSansCycle(&grapheCondorcet, graphe);
+    ListeArcs grapheCondorcetPaire = creerListeArcs();
+    ajouterArcsSansCycle(&grapheCondorcetPaire, graphe);
 
-    graphe = &grapheCondorcet;
+    graphe->debut = grapheCondorcetPaire.debut;
 }

@@ -14,6 +14,8 @@ void lecture_csv_score_condorcet(const char *nom_fichier, t_mat_char_star_dyn *m
 
 void compter_lignes_colonnes_csv(const char * nom_fichier, int * lignes, int * colonnes);
 
+void lire_noms_candidats_csv(const char *nom_fichier, char *noms[], int nb_max);
+
 void lecture_csv_jugement(const char *nom_fichier, Candidat_mention ** candidats, int nb_candidats, int nb_electeurs);
 
 #endif // LECTURE_CSV_H

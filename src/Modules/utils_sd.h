@@ -79,13 +79,13 @@ typedef struct {
 /// Score total du candidat.
 typedef struct {
     int indice;
-    char nom[50];
+    char nom[100];
     int score;
 } Candidat;
 
 typedef struct {
     int indice;
-    char nom[50];
+    char nom[100];
     int score[6];
     float pourcentage[6];
     int mediane;

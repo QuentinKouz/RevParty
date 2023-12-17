@@ -158,6 +158,34 @@ void lecture_csv_score_condorcet(const char *nom_fichier, t_mat_char_star_dyn *m
     fclose(fichier);
 }
 
+void lire_noms_candidats_csv(const char *nom_fichier, char *noms[], int nb_max) {
+    FILE *fichier = fopen(nom_fichier, "r");
+
+    if (fichier == NULL) {
+        perror("Erreur lors de l'ouverture du fichier");
+        exit(EXIT_FAILURE);
+    }
+
+    char ligne[1024];
+    fgets(ligne, sizeof(ligne), fichier);
+    char * token = strtok(ligne, ",");
+    int i=0;
+
+    //ignore les 4 premières colonnes
+    for (int j=0; j<4; j++) {
+        token = strtok(NULL, ",");
+    }
+
+    while (token != NULL) {
+        if (i<nb_max) {
+            noms[i] = malloc(strlen(token) + 1);
+            strcpy(noms[i], token);
+            i++;
+        }
+        token = strtok(NULL, ",");
+    }
+}
+
 void lecture_csv_jugement(const char *nom_fichier, Candidat_mention **candidats, int nb_candidats, int nb_electeurs) {
     FILE *fichier = fopen(nom_fichier, "r");
     if (fichier == NULL) {

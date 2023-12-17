@@ -13,7 +13,7 @@
 #include <stdbool.h>
 
 //TODO : recuperer les noms depuis le fichiers csv 
-char* noms[] = {"Burger Black Pepper", "Burger Sud-Ouest", "Thai Burger", "Veggie Burger", "Fire Cracker", "Roma", "Crispy" "Cheese Burger", "Burger Surprise", "Country"};
+//char* noms[] = {"Burger Black Pepper", "Burger Sud-Ouest", "Thai Burger", "Veggie Burger", "Fire Cracker", "Roma", "Crispy" "Cheese Burger", "Burger Surprise", "Country"};
 
 void trierGraphe(ListeArcs * graphe) {
     ListeArcs graphe_trie = creerListeArcs();
@@ -107,7 +107,9 @@ void obtenirGraphe(const char* fichier, ListeArcs * graphe) {
 void condorcet(const char * fichier, int methodeParadoxe) {
     ListeArcs grapheCondorcet = creerListeArcs();
     obtenirGraphe(fichier, &grapheCondorcet);
-    
+    char * noms[MAX_CANDIDATS];
+    lire_noms_candidats_csv(fichier, &noms, MAX_CANDIDATS);
+
     int vainqueur = trouverVainqueurCondorcet(grapheCondorcet);
     printf("Mode de scrutin : Condorcet\n");
     if (vainqueur != -1) {
@@ -116,12 +118,13 @@ void condorcet(const char * fichier, int methodeParadoxe) {
     }
     printf("PARADOXE DE CONDORCET\n");
     ListeArcs grapheCondorcetParadoxe = creerListeArcs();
+    
     switch (methodeParadoxe) {
         case 0: // paire
             printf("Résolution du paradoxe par la méthode des paires\n");
             obtenirGraphePaire(fichier, &grapheCondorcetParadoxe);
-            int vainqueur = trouverVainqueurCondorcet(grapheCondorcet);
-            printf("\tLe vainqueur de condorcet est : %s\n", noms[vainqueur]);
+            int vainqueur = trouverVainqueurCondorcet(grapheCondorcetParadoxe);
+            printf("\tLe candidats %s est vainqueur de Condorcet paires\n", noms[vainqueur]);
             break;
         case 1: // schulzes
             obtenirGraphe(fichier, &grapheCondorcetParadoxe);

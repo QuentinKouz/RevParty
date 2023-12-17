@@ -237,23 +237,21 @@ void ajouterArc(ListeArcs *liste, const Arc *arc){
 }
 
 void retirerArc(ListeArcs* liste, Arc *arc) {
-    if (liste == NULL) {
-        printf("La liste est vide ou n'existe pas.\n");
+    if (liste == NULL || liste->debut == NULL) {
+        //printf("La liste est vide ou n'existe pas.\n");
         return;
     }
 
     Arc *p = liste->debut;
     Arc *prev = NULL;
 
-    if (p == arc) { // Vérifier si l'arc à retirer est en tête de liste
-        printf("p==arc\n");
+    if ((p->sommetArrivee == arc->sommetArrivee)&& (p->sommetDepart == arc->sommetDepart)) { // Vérifier si l'arc à retirer est en tête de liste
         liste->debut = p->suivant;
         free(p);
         (liste->taille)--;
         return;
     }
-
-    while ((p != NULL) && (p->sommetArrivee != arc->sommetArrivee)&& (p->sommetDepart != arc->sommetDepart)) {
+    while ((p != NULL) && ((p->sommetArrivee != arc->sommetArrivee)|| (p->sommetDepart != arc->sommetDepart))) {
         prev = p;
         p = p->suivant;
     }
@@ -262,7 +260,6 @@ void retirerArc(ListeArcs* liste, Arc *arc) {
         //printf("L'arc à enlever n'est pas dans la liste\n");
         return;
     }
-
     prev->suivant = p->suivant;
     free(p);
     (liste->taille)--;

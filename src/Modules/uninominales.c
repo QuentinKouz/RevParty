@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "utils_sd.h"
+#include "lecture_csv.h"
 
 #define MAX_CANDIDATS 10
 #define MAX_VOTANTS 100
@@ -83,20 +84,15 @@ void uninominales(const char *nomFichier, int nbTours) {
     ignorerEnTetes(fichier);
 
     int nbCandidats = MAX_CANDIDATS;
-    Candidat candidats[MAX_CANDIDATS] = {0};
-    strcpy(candidats[0].nom, "Burger Black Pepper");
-    strcpy(candidats[1].nom, "Burger Sud-Ouest");
-    strcpy(candidats[2].nom, "Thai Burger");
-    strcpy(candidats[3].nom, "Veggie Burger");
-    strcpy(candidats[4].nom, "Fire Cracker");
-    strcpy(candidats[5].nom, "Roma");
-    strcpy(candidats[6].nom, "Crispy");
-    strcpy(candidats[7].nom, "Cheese Burger");
-    strcpy(candidats[8].nom, "Burger Surprise");
-    strcpy(candidats[9].nom, "Country");
 
+    char * noms[MAX_CANDIDATS];
+    lire_noms_candidats_csv(cheminComplet, &noms, MAX_CANDIDATS);
+
+    Candidat candidats[MAX_CANDIDATS];
+    
     for (int i=0; i<MAX_CANDIDATS; i++) {
-        candidats[i].score = 0;
+        strcpy(candidats[i].nom, noms[i]);
+        candidats[i].score = 0; 
     }
 
     int votesVotants[MAX_VOTANTS][MAX_CANDIDATS];
