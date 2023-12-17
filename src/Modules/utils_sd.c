@@ -237,7 +237,7 @@ void ajouterArc(ListeArcs *liste, const Arc *arc){
 }
 
 void retirerArc(ListeArcs* liste, Arc *arc) {
-    if (liste == NULL || liste->debut == NULL) {
+    if (liste == NULL) {
         printf("La liste est vide ou n'existe pas.\n");
         return;
     }
@@ -246,19 +246,20 @@ void retirerArc(ListeArcs* liste, Arc *arc) {
     Arc *prev = NULL;
 
     if (p == arc) { // Vérifier si l'arc à retirer est en tête de liste
+        printf("p==arc\n");
         liste->debut = p->suivant;
         free(p);
         (liste->taille)--;
         return;
     }
 
-    while (p != NULL && p != arc) {
+    while ((p != NULL) && (p->sommetArrivee != arc->sommetArrivee)&& (p->sommetDepart != arc->sommetDepart)) {
         prev = p;
         p = p->suivant;
     }
 
     if (p == NULL) {
-        printf("L'arc à enlever n'est pas dans la liste\n");
+        //printf("L'arc à enlever n'est pas dans la liste\n");
         return;
     }
 
@@ -334,9 +335,15 @@ void afficherListeArcs(const ListeArcs *liste) {
     while (courant != NULL) {
         //printf("(%s -> %s, poids = %d)\n", candidats[courant->sommetDepart].nom, candidats[courant->sommetArrivee].nom, courant->poids);
         printf("%d: (%d -> %d), poids = %d\n", i, courant->sommetDepart, courant->sommetArrivee, courant->poids);
+        fflush(stdout);
         courant = courant->suivant;
         i++;
     }
+}
+
+void afficherArc(const Arc *arc) {
+    printf("(%d -> %d), poids = %d\n", arc->sommetDepart, arc->sommetArrivee, arc->poids);
+    fflush(stdout);
 }
 
 void afficherListeDeListeArcs (ListeDeListeArcs * liste) {
@@ -347,6 +354,7 @@ void afficherListeDeListeArcs (ListeDeListeArcs * liste) {
         printf("\tPoids: %d\n\n",e->poids);
         e = e->suivant;
     }
+    fflush(stdout);
 }
 
 int weight_at(ListeDeListeArcs* liste, int ind) {

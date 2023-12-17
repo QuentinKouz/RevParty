@@ -8,6 +8,6 @@
 
 #include "utils_sd.h"
 
-void schulzes(ListeArcs * graphe);
+void schulzes(ListeArcs * graphe, char * candidats[]);
 
 #endif // CONDORCET_SCHULZES_H

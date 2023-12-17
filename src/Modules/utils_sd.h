@@ -162,6 +162,8 @@ void afficherMatriceDuelAvecNoms(const MatriceDuel *matrice, int nbCandidats);
 
 void afficherListeArcs(const ListeArcs *liste);
 
+void afficherArcs(const Arc *arc);
+
 void afficherListeDeListeArcs (ListeDeListeArcs * liste);
 
 int weight_at(ListeDeListeArcs* liste, int ind);

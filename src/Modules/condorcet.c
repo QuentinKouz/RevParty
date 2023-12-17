@@ -15,6 +15,26 @@
 //TODO : recuperer les noms depuis le fichiers csv 
 char* noms[] = {"Burger Black Pepper", "Burger Sud-Ouest", "Thai Burger", "Veggie Burger", "Fire Cracker", "Roma", "Crispy" "Cheese Burger", "Burger Surprise", "Country"};
 
+void trierGraphe(ListeArcs * graphe) {
+    ListeArcs graphe_trie = creerListeArcs();
+    int t = graphe->taille;
+    for (int i=0; i<t; i++) {
+        int poidsMax = graphe->debut->poids;
+        Arc *arcVainqueur = graphe->debut;
+        Arc *p = graphe->debut;
+        while (p != NULL) {
+            if (p->poids>poidsMax) {
+                poidsMax = p->poids;
+                arcVainqueur = p;
+            }
+            p = p->suivant;
+        }
+        ajouterArc(&graphe_trie, arcVainqueur);
+        retirerArc(graphe, arcVainqueur);
+    }
+    graphe->debut = graphe_trie.debut;
+}
+
 int calculerNbArcsMax(int nb_candidats){
     int nb_arcs = 0;
     for (int i=nb_candidats-1; i>0; i--) {
@@ -87,7 +107,7 @@ void obtenirGraphe(const char* fichier, ListeArcs * graphe) {
 void condorcet(const char * fichier, int methodeParadoxe) {
     ListeArcs grapheCondorcet = creerListeArcs();
     obtenirGraphe(fichier, &grapheCondorcet);
-
+    
     int vainqueur = trouverVainqueurCondorcet(grapheCondorcet);
     printf("Mode de scrutin : Condorcet\n");
     if (vainqueur != -1) {
@@ -105,7 +125,7 @@ void condorcet(const char * fichier, int methodeParadoxe) {
             break;
         case 1: // schulzes
             obtenirGraphe(fichier, &grapheCondorcetParadoxe);
-            schulzes(&grapheCondorcet);
+            schulzes(&grapheCondorcet, noms);
             break;
         case 2: //minimax
             // todo Salim

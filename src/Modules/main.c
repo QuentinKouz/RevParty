@@ -9,6 +9,7 @@
 #include <getopt.h>
 #include "utils_sd.h"
 #include "uninominales.h"
+#include "condorcet.h"
 
 
 int main(int argc, char *argv[]) {

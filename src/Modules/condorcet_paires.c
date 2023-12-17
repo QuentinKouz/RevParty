@@ -9,28 +9,8 @@
 #include "utils_sd.h"
 #include "lecture_csv.h"
 #include "condorcet_schulzes.h"
+#include "condorcet.h"
 #include <stdbool.h>
-
-
-void trierGraphe(ListeArcs * graphe) {
-    ListeArcs graphe_trie = creerListeArcs();
-    int t = graphe->taille;
-    for (int i=0; i<t; i++) {
-        int poidsMax = graphe->debut->poids;
-        Arc *arcVainqueur = graphe->debut;
-        Arc *p = graphe->debut;
-        while (p != NULL) {
-            if (p->poids>poidsMax) {
-                poidsMax = p->poids;
-                arcVainqueur = p;
-            }
-            p = p->suivant;
-        }
-        ajouterArc(&graphe_trie, arcVainqueur);
-        retirerArc(graphe, arcVainqueur);
-    }
-    graphe->debut = graphe_trie.debut;
-}
 
 bool creeCycle(ListeArcs *grapheCondorcet, Arc* arc) {
     // renvoie true si lors du parcours du graphe depuis le sommet destination de l'arc, on tombe sur le sommet source de l'arc
