@@ -125,7 +125,8 @@ void compter_lignes_colonnes_csv(const char * nom_fichier, int * lignes, int * c
     }
 
     // Soustraire 1 pour corriger le comptage de la dernière ligne
-    (*colonnes) = (*colonnes) / (*lignes) - 1;
+    (*colonnes) = (*colonnes) / (*lignes) - 4;
+    (*lignes)--;
     fclose(fichier);
 }
 
@@ -160,7 +161,7 @@ void lecture_csv_score_condorcet(const char *nom_fichier, t_mat_char_star_dyn *m
 
 void lire_noms_candidats_csv(const char *nom_fichier, char *noms[], int nb_max) {
     FILE *fichier = fopen(nom_fichier, "r");
-
+    
     if (fichier == NULL) {
         perror("Erreur lors de l'ouverture du fichier");
         exit(EXIT_FAILURE);
@@ -184,6 +185,8 @@ void lire_noms_candidats_csv(const char *nom_fichier, char *noms[], int nb_max) 
         }
         token = strtok(NULL, ",");
     }
+
+    fclose(fichier);
 }
 
 void lecture_csv_jugement(const char *nom_fichier, Candidat_mention **candidats, int nb_candidats, int nb_electeurs) {
@@ -201,31 +204,20 @@ void lecture_csv_jugement(const char *nom_fichier, Candidat_mention **candidats,
         exit(EXIT_FAILURE);
     }
 
-    *candidats = (Candidat_mention *)malloc(nb_candidats * sizeof(Candidat_mention));
+    /**candidats = (Candidat_mention *)malloc(nb_candidats * sizeof(Candidat_mention));
     if (*candidats == NULL) {
         perror("Erreur d'allocation de mémoire");
         fclose(fichier);
         exit(EXIT_FAILURE);
-    }
+    }*/
 
-    const char *noms_burgers[] = {
-        "Burger Black Pepper",
-        "Burger Sud-Ouest",
-        "Thai Burger",
-        "Veggie Burger",
-        "Fire cracker",
-        "Roma",
-        "Crispy",
-        "Cheese Burger",
-        "Burger surprise",
-        "Country"
-    };
-
+    char *noms_burgers[nb_candidats];
+    lire_noms_candidats_csv(nom_fichier, &noms_burgers, nb_candidats);
+    
     for (int i = 0; i < nb_candidats; i++) {
         // Copiez le nom dans le champ 'nom' de la structure
-        strncpy((*candidats)[i].nom, noms_burgers[i], sizeof((*candidats)[i].nom));
+        strcpy((*candidats)[i].nom, noms_burgers[i]);
     }
-
     while (fgets(ligne, sizeof(ligne), fichier)) {
         char *valeurVote = strtok(ligne, ",");
         for (int i = 0; i < 3; i++) {
@@ -240,5 +232,4 @@ void lecture_csv_jugement(const char *nom_fichier, Candidat_mention **candidats,
             }
         }
     }
-    fclose(fichier);
 }
