@@ -100,8 +100,18 @@ void jugement_majoritaire(char * nom_fichier,const char * log) {
     int nb_candidats = 0;
     compter_lignes_colonnes_csv(nom_fichier, &nb_electeurs, &nb_candidats);
     Candidat_mention * candidats;
+
+    char mot[] = "Jugement";
+
+    if (strstr(nom_fichier, mot) != NULL) {
+        // le nom du fichier contient le mot Jugement, il a donc le bon format
+        lecture_csv_jugement(nom_fichier, &candidats, nb_candidats, nb_electeurs);
+    } else {
+        // le nom du fichier ne contient pas le mot Jugement, il n'a donc pas le bon format
+        lecture_csv_jugement_conversion_mention(nom_fichier, &candidats, nb_candidats, nb_electeurs);
+    }
     
-    lecture_csv_jugement(nom_fichier, &candidats, nb_candidats, nb_electeurs);
+    
     afficher_score_jugement(candidats, nb_candidats,log);
 
     // remplir les pourcentages

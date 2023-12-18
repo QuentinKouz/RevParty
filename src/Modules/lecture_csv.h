@@ -18,4 +18,6 @@ void lire_noms_candidats_csv(const char *nom_fichier, char *noms[], int nb_max);
 
 void lecture_csv_jugement(const char *nom_fichier, Candidat_mention ** candidats, int nb_candidats, int nb_electeurs);
 
+void lecture_csv_jugement_conversion_mention(const char *nom_fichier, Candidat_mention **candidats, int nb_candidats, int nb_electeurs);
+
 #endif // LECTURE_CSV_H

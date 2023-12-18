@@ -273,3 +273,78 @@ void lecture_csv_jugement(const char *nom_fichier, Candidat_mention **candidats,
         }
     }
 }
+
+
+/// @fn void lecture_csv_jugement_conversion_mention(const char *nom_fichier, Candidat_mention **candidats, int nb_candidats, int nb_electeurs)
+/// @brief Lit un fichier CSV et fait la conversion des mentions pour remplir un tableau de structures Candidat_mention.
+/// @param[in] nom_fichier Nom du fichier CSV à lire.
+/// @param[in] candidats Pointeur vers un tableau de structures Candidat_mention à remplir.
+/// @param[in] nb_candidats Nombre de candidats.
+/// @param[in] nb_electeurs Nombre d'électeurs.
+void lecture_csv_jugement_conversion_mention(const char *nom_fichier, Candidat_mention **candidats, int nb_candidats, int nb_electeurs) {
+    FILE *fichier = fopen(nom_fichier, "r, ccs=UTF-8");
+    if (fichier == NULL) {
+        perror("Erreur lors de l'ouverture du fichier");
+        exit(EXIT_FAILURE);
+    }
+
+    char ligne[1024];
+    // on ignore la première ligne
+    if (fgets(ligne, sizeof(ligne), fichier) == NULL) {
+        fprintf(stderr, "Le fichier est vide.\n");
+        fclose(fichier);
+        exit(EXIT_FAILURE);
+    }
+
+    *candidats = (Candidat_mention *)malloc(nb_candidats * sizeof(Candidat_mention));
+    if (*candidats == NULL) {
+        perror("Erreur d'allocation de mémoire");
+        fclose(fichier);
+        exit(EXIT_FAILURE);
+    }
+
+    char *noms_burgers[nb_candidats];
+    lire_noms_candidats_csv(nom_fichier, &noms_burgers, nb_candidats);
+    
+    for (int i = 0; i < nb_candidats; i++) {
+        // Copiez le nom dans le champ 'nom' de la structure
+        strcpy((*candidats)[i].nom, noms_burgers[i]);
+    }
+    while (fgets(ligne, sizeof(ligne), fichier)) {
+        char *valeurVote = strtok(ligne, ",");
+        for (int i = 0; i < 3; i++) {
+            valeurVote = strtok(NULL, ",");
+        }
+        for (int i = 0; i < nb_candidats; i++) {
+            valeurVote = strtok(NULL, ",");
+            int vote = atoi(valeurVote);
+
+            // conversion vote en mention : 1:TB 2-3:B  4-5:AB 6-7:P 8-9:M 10:AF
+            switch (vote) {
+                case 2:
+                case 3:
+                    vote = 2;
+                    break;
+                case 4:
+                case 5:
+                    vote = 3;
+                    break;
+                case 6:
+                case 7:
+                    vote = 4;
+                    break;
+                case 8:
+                case 9:
+                    vote = 5;
+                    break;
+                case (10):
+                    vote = 6;
+                    break;
+            }
+            
+            if (vote != -1) {
+                (*candidats)[i].score[vote-1]++;
+            }
+        }
+    }
+}
