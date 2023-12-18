@@ -65,7 +65,8 @@ Candidat trouverVainqueur(Candidat candidats[], int nbCandidats, unsigned * indi
 /// @fn void uninominales(const char *nomFichier)
 /// @brief Détermine le vainqueur basé sur les données du fichier spécifié.
 /// @param[in] nomFichier Nom du fichier contenant les résultats du vote.
-void uninominales(const char *nomFichier, int nbTours) {
+/// @param[in] log fichier log 
+void uninominales(const char *nomFichier, int nbTours,const char * log) {
 
     if (nbTours !=1 && nbTours !=2) {
         fprintf(stderr,"Erreur paramètres de fonction\n");
@@ -127,8 +128,11 @@ void uninominales(const char *nomFichier, int nbTours) {
 
     // certains électeurs ont voté plusieurs fois "1" pour un candidat, pour ne pas avoir à choisir le candidat voté nous les comptons tous, bien que cela donne plus de voix à certaines personnes.
     // le nombre total de votes diffère donc du nombre de votants, et nous en avons besoin pour calculer le score de chaque candidat en %
+    fprintf(log, "SCORES CANDIDATS UNINOMINALE\n\n");
+    fprintf(log, "%-25s | %-10s\n", "Nom", "Score");
     for (int i=0; i<MAX_CANDIDATS; i++) {
         nbVotes += candidats[i].score;
+        fprintf(log, "%-25s | %-10d\n", candidats[i].nom, candidats[i].score);
     }
 
     vainqueurs[0] = trouverVainqueur(candidats, nbCandidats, &indiceVainqueurs[0]);
@@ -150,7 +154,7 @@ void uninominales(const char *nomFichier, int nbTours) {
         return;
     } 
 
-    printf("Mode de scrutin : uninominal à deux tours, %d candidats, %d votants\n", MAX_CANDIDATS, nbVotants-1);
+    printf("Mode de scrutin : uninominal à 2 tours, %d candidats, %d votants\n", MAX_CANDIDATS, nbVotants-1);
 
     printf("\tPremier tour : vainqueurs = %s (%.2f%%), %s (%.2f%%)\n", vainqueurs[0].nom, scores[0], vainqueurs[1].nom, scores[1]);
 
@@ -193,5 +197,5 @@ void uninominales(const char *nomFichier, int nbTours) {
         vainqueur = vainqueurs[1];
     }
 
-    printf("\tDeuxième tour : vainqueur = %s (%.2f%%)\n\n", vainqueur.nom, (float) ((float) vainqueur.score/((float) vainqueurs[0].score + vainqueurs[1].score))*100);
+    printf("\tDeuxième tour : vainqueur = %s (%.2f%%)\n", vainqueur.nom, (float) ((float) vainqueur.score/((float) vainqueurs[0].score + vainqueurs[1].score))*100);
 }

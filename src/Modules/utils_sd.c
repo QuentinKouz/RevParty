@@ -153,7 +153,9 @@ void remplirMatriceDuel(const t_mat_char_star_dyn *matriceVote, MatriceDuel *mat
 /// @brief Affiche une matrice de duels avec les noms des candidats.
 /// @param[in] matrice Matrice de duels à afficher.
 /// @param[in] nbCandidats Nombre de candidats.
-void afficherMatriceDuelAvecNoms(const MatriceDuel *matrice, int nbCandidats) {
+/// @param[in] log fichier log
+void afficherMatriceDuelAvecNoms(const MatriceDuel *matrice, int nbCandidats,const char * log) {
+    fprintf(log,"MATRICE DUELS : \n\n");
     // Trouver la longueur maximale des noms
     int longueurMaxNom = 0;
     for (int i = 0; i < nbCandidats; ++i) {
@@ -164,37 +166,37 @@ void afficherMatriceDuelAvecNoms(const MatriceDuel *matrice, int nbCandidats) {
     }
 
     // Afficher les noms des candidats en haut de la matrice
-    printf("%-*s |", longueurMaxNom, "");
+    fprintf(log,"%-*s |", longueurMaxNom, "");
 
     for (int i = 0; i < nbCandidats; ++i) {
-        printf(" %-*s |", longueurMaxNom, candidats[i].nom);
+        fprintf(log," %-*s |", longueurMaxNom, candidats[i].nom);
     }
-    printf("\n");
+    fprintf(log,"\n");
 
     // Afficher une ligne de séparation
     for (int i = 0; i < nbCandidats + 1; ++i) {
         for (int j = 0; j < longueurMaxNom + 3; ++j) {
-            printf("-");
+            fprintf(log,"-");
         }
     }
-    printf("\n");
+    fprintf(log,"\n");
 
     // Afficher la matrice avec les noms des candidats sur le côté
     for (int i = 0; i < matrice->lignes; ++i) {
-        printf("%-*s |", longueurMaxNom, candidats[i].nom);
+        fprintf(log,"%-*s |", longueurMaxNom, candidats[i].nom);
 
         for (int j = 0; j < matrice->colonnes; ++j) {
-            printf(" %-*d |", longueurMaxNom, matrice->donnees[i][j]);
+            fprintf(log," %-*d |", longueurMaxNom, matrice->donnees[i][j]);
         }
-        printf("\n");
+        fprintf(log,"\n");
 
         // Afficher une ligne de séparation après chaque ligne de données
         for (int k = 0; k < nbCandidats + 1; ++k) {
             for (int l = 0; l < longueurMaxNom + 3; ++l) {
-                printf("-");
+                fprintf(log,"-");
             }
         }
-        printf("\n");
+        fprintf(log,"\n");
     }
 }
 
@@ -390,12 +392,14 @@ void libererListeArcs(ListeArcs *liste) {
 /// @fn void afficherListeArcs(const ListeArcs *liste)
 /// @brief Affiche les arcs d'une liste.
 /// @param[in] liste Liste d'arcs à afficher.
-void afficherListeArcs(const ListeArcs *liste) {
+/// @param[in] log fichier log 
+void afficherListeArcs(const ListeArcs *liste,const char * log) {
     Arc *courant = liste->debut;
     int i=0;
+    fprintf(log,"LISTE DES ARCS:\n\n");
     while (courant != NULL) {
         //printf("(%s -> %s, poids = %d)\n", candidats[courant->sommetDepart].nom, candidats[courant->sommetArrivee].nom, courant->poids);
-        printf("%d: (%d -> %d), poids = %d\n", i, courant->sommetDepart, courant->sommetArrivee, courant->poids);
+        fprintf(log,"%d: (%d -> %d), poids = %d\n", i, courant->sommetDepart, courant->sommetArrivee, courant->poids);
         fflush(stdout);
         courant = courant->suivant;
         i++;
@@ -414,12 +418,13 @@ void afficherArc(const Arc *arc) {
 /// @fn void afficherListeDeListeArcs(ListeDeListeArcs *liste)
 /// @brief Affiche les listes d'arcs d'une liste de listes d'arcs.
 /// @param[in] liste Liste de listes d'arcs à afficher.
-void afficherListeDeListeArcs (ListeDeListeArcs * liste) {
+/// @param[in] log fichier log 
+void afficherListeDeListeArcs (ListeDeListeArcs * liste, const char * log) {
     ListeArcs * e = liste->debut;
-    printf("Affichage:\n");
+    fprintf(log,"Affichage:\n");
     while (e!=NULL) {
-        afficherListeArcs(e);
-        printf("\tPoids: %d\n\n",e->poids);
+        afficherListeArcs(e,log);
+        printf(log,"\tPoids: %d\n\n",e->poids);
         e = e->suivant;
     }
     fflush(stdout);
@@ -446,13 +451,16 @@ int weight_at(ListeDeListeArcs* liste, int ind) {
 /// @brief Affiche les scores de jugement pour chaque candidat.
 /// @param[in] candidats Tableau de candidats avec leurs scores.
 /// @param[in] nb_candidats Nombre de candidats dans le tableau.
-void afficher_score_jugement(const Candidat_mention *candidats, int nb_candidats) {
+/// @param[in] log fichier log
+
+void afficher_score_jugement(const Candidat_mention *candidats, int nb_candidats,const char * log) {
+    fprintf(log,"SCORE JUGEMENT MAJORITAIRE POUR CHAQUE CANDIDAT\n\n");
     for (int i = 0; i < nb_candidats; i++) {
-        printf("Nom: %s\n", candidats[i].nom);
-        printf("Scores: ");
+        fprintf(log,"Nom: %s\n", candidats[i].nom);
+        fprintf(log,"Scores: ");
         for (int j = 0; j < 6; j++) {
-            printf("%d ", candidats[i].score[j]);
+            fprintf(log,"%d ", candidats[i].score[j]);
         }
-        printf("\n\n");
+        fprintf(log,"\n\n");
     }
 }

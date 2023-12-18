@@ -10,6 +10,6 @@
 
 void trierGraphe(ListeArcs * graphe);
 
-void condorcet(const char * fichier, int methodeParadoxe);
+void condorcet(const char * fichier, int methodeParadoxe, const char *log);
 
 #endif // CONDORCET_SCHULZES_H

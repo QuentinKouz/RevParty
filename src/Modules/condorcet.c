@@ -13,8 +13,6 @@
 #include "condorcet_minimax.h"
 #include <stdbool.h>
 
-//TODO : recuperer les noms depuis le fichiers csv 
-//char* noms[] = {"Burger Black Pepper", "Burger Sud-Ouest", "Thai Burger", "Veggie Burger", "Fire Cracker", "Roma", "Crispy" "Cheese Burger", "Burger Surprise", "Country"};
 
 /// @fn void trierGraphe(ListeArcs *graphe)
 /// @brief Trie les arcs du graphe en fonction de leur poids.
@@ -114,10 +112,11 @@ int trouverVainqueurCondorcet(ListeArcs grapheCondorcet) {
     return -1;
 }
 
-/// @fn void obtenirGraphe(const char* fichier, ListeArcs *graphe)
+/// @fn void obtenirGraphe(const char* fichier, ListeArcs *graphe,,const char* log)
 /// @brief Obtient le graphe à partir d'un fichier CSV.
 /// @param[in] fichier Chemin vers le fichier CSV.
-void obtenirGraphe(const char* fichier, ListeArcs * graphe) {
+/// @param[in] log fichier log
+void obtenirGraphe(const char* fichier, ListeArcs * graphe,const char* log) {
     // obtenir liste arcs et matrice duels
     t_mat_char_star_dyn mat;
     int l = 0;
@@ -127,16 +126,21 @@ void obtenirGraphe(const char* fichier, ListeArcs * graphe) {
     lecture_csv_score_condorcet(fichier, &mat, LIGNES, COLONNES);
     MatriceDuel matriceDuels = creerMatriceDuel(MAX_CANDIDATS, MAX_CANDIDATS);
     remplirMatriceDuel(&mat, &matriceDuels);
+    char * noms[MAX_CANDIDATS];
+    lire_noms_candidats_csv(fichier, &noms, MAX_CANDIDATS);
+    afficherMatriceDuelAvecNoms(&matriceDuels, MAX_CANDIDATS,log);
     creerListeArcsDepuisMatrice(matriceDuels, MAX_CANDIDATS, graphe);
+    afficherListeArcs (graphe, log);
 }
 
-/// @fn void condorcet(const char *fichier, int methodeParadoxe)
+/// @fn void condorcet(const char *fichier, int methodeParadoxe,,const char* log)
 /// @brief Exécute l'algorithme de Condorcet en utilisant une méthode spécifique en cas de paradoxe.
 /// @param[in] fichier Chemin vers le fichier CSV.
 /// @param[in] methodeParadoxe Méthode à utiliser en cas de paradoxe (0 pour paires, 1 pour Schulzes, 2 pour Minimax).
-void condorcet(const char * fichier, int methodeParadoxe) {
+/// @param[in] log fichier log
+void condorcet(const char * fichier, int methodeParadoxe,const char* log) {
     ListeArcs grapheCondorcet = creerListeArcs();
-    obtenirGraphe(fichier, &grapheCondorcet);
+    obtenirGraphe(fichier, &grapheCondorcet,log);
     char * noms[MAX_CANDIDATS];
     lire_noms_candidats_csv(fichier, &noms, MAX_CANDIDATS);
     int vainqueur = trouverVainqueurCondorcet(grapheCondorcet);
@@ -156,21 +160,12 @@ void condorcet(const char * fichier, int methodeParadoxe) {
             printf("\tLe candidats %s est vainqueur de Condorcet paires !\n", noms[vainqueur]);
             break;
         case 1: // schulzes
-            obtenirGraphe(fichier, &grapheCondorcetParadoxe);
+            obtenirGraphe(fichier, &grapheCondorcetParadoxe,log);
             schulzes(&grapheCondorcet, noms);
             break;
         case 2: //minimax
-              obtenirGraphe(fichier, &grapheCondorcetParadoxe);
+              obtenirGraphe(fichier, &grapheCondorcetParadoxe,log);
               minimax(&grapheCondorcet, noms);
             break;
     }
 }
-
-/*
-int main(int argc, const char* argv[]) {
-    if (argc != 2) {
-        printf("Usage: %s <fichier_condorcet>\n", argv[0]);
-        exit(2);
-    }   
-    condorcet(argv[1], 0);
-}*/

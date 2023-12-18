@@ -102,28 +102,33 @@ int main(int argc, char *argv[]) {
     
     // Traitement en fonction des options
     if (strcmp(methode, "all") == 0){
-        printf("all\n");
+        uninominales("../ResultatsVote/VoteCondorcet.csv", 1, logfp);
+        uninominales("../ResultatsVote/VoteCondorcet.csv", 2, logfp);
+        condorcet("../ResultatsVote/VoteCondorcet.csv", 2,logfp);
+        condorcet("../ResultatsVote/VoteCondorcet.csv", 0,logfp);
+        condorcet("../ResultatsVote/VoteCondorcet.csv", 1,logfp);
+        jugement_majoritaire("../ResultatsVote/voteJugement.csv",logfp);
     }
     else if (strcmp(methode, "uni1") == 0) {
         // Code pour uni1
-        uninominales(fichierEntree, 1);
+        uninominales(fichierEntree, 1, logfp);
     } 
     else if (strcmp(methode, "uni2") == 0) {
-        uninominales(fichierEntree, 2);
+        uninominales(fichierEntree, 2, logfp);
     } 
     else if (strcmp(methode, "cm") == 0) {
         //fprintf(logfp,"je suis dans cm\n");
-        condorcet(fichierEntree, 2);
+        condorcet(fichierEntree, 2,logfp);
     } 
     else if (strcmp(methode, "cp") == 0) {
-        condorcet(fichierEntree, 0);
+        condorcet(fichierEntree, 0,logfp);
     } 
     else if (strcmp(methode, "cs") == 0) {
-        condorcet(fichierEntree, 1);
+        condorcet(fichierEntree, 1,logfp);
     } 
     else if (strcmp(methode, "jm") == 0) {
         // Code pour jm
-        jugement_majoritaire(fichierEntree);
+        jugement_majoritaire(fichierEntree,logfp);
     } 
     else {
         fprintf(stderr, "Erreur : Méthode non reconnue.\n");

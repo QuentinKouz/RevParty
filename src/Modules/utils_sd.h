@@ -191,16 +191,16 @@ void libererMatriceDuel(MatriceDuel *matrice);
 
 void libererListeArcs(ListeArcs *liste);
 
-void afficherMatriceDuelAvecNoms(const MatriceDuel *matrice, int nbCandidats);
+void afficherMatriceDuelAvecNoms(const MatriceDuel *matrice, int nbCandidats,const char * fichier);
 
-void afficherListeArcs(const ListeArcs *liste);
+void afficherListeArcs(const ListeArcs *liste, const char * log);
 
 void afficherArcs(const Arc *arc);
 
-void afficherListeDeListeArcs (ListeDeListeArcs * liste);
+void afficherListeDeListeArcs (ListeDeListeArcs * liste, const char * log);
 
 int weight_at(ListeDeListeArcs* liste, int ind);
 
-void afficher_score_jugement(const Candidat_mention *candidats, int nb_candidats);
+void afficher_score_jugement(const Candidat_mention *candidats, int nb_candidats, const char * log);
 
 #endif // UTILS_SD_H

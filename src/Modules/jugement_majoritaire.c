@@ -94,25 +94,34 @@ int calculerMediane(Candidat_mention candidat, int nb_electeurs) {
 /// @fn void jugement_majoritaire(char *nom_fichier)
 /// @brief Exécute le jugement majoritaire pour déterminer le vainqueur d'une élection.
 /// @param[in] nom_fichier Chemin vers le fichier contenant les données de l'élection.
-void jugement_majoritaire(char * nom_fichier) {
+/// @param[in] log fichier log
+void jugement_majoritaire(char * nom_fichier,const char * log) {
     int nb_electeurs = 0;
     int nb_candidats = 0;
     compter_lignes_colonnes_csv(nom_fichier, &nb_electeurs, &nb_candidats);
     Candidat_mention * candidats;
     
     lecture_csv_jugement(nom_fichier, &candidats, nb_candidats, nb_electeurs);
-    afficher_score_jugement(candidats, nb_candidats);
+    afficher_score_jugement(candidats, nb_candidats,log);
 
     // remplir les pourcentages
+    fprintf(log,"LES POURCENTAGES POUR CHAQUE CANDIDAT\n\n");
+    fprintf(log, "%-25s | %-10s\n", "Noms", "Pourcentages");
+
     for (int j=0; j<nb_candidats; j++){
         for (int i=0; i<6; i++) {
             candidats[j].pourcentage[i] = 100.0*(candidats[j].score[i] /(float) nb_electeurs);
-            printf("nom : %s\t\tpourcentage : %.2f%%\n",candidats[j].nom,candidats[j].pourcentage[i]);
+            fprintf(log,"nom : %-25s\t\tpourcentage : %.2f%%\n",candidats[j].nom,candidats[j].pourcentage[i]);
         }
         
         
         candidats[j].mediane = calculerMediane(candidats[j], nb_electeurs);
     }
+    
+    fprintf(log,"MEDIANE POUR CHAQUE CANDIDAT :\n\n");
+    for (int k=0; k<nb_candidats; k++){
+            fprintf(log," %s : %d\n",candidats[k].nom,candidats[k].mediane);
+        } 
 
     Candidat_mention vainqueur = chercher_vainqueur_jugement(candidats, nb_candidats);
 

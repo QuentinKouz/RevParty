@@ -6,6 +6,6 @@
 #ifndef JUGEMENT_MAJORITAIRE_H
 #define JUGEMENT_MAJORITAIRE_H
 
-void jugement_majoritaire(char * nom_fichier);
+void jugement_majoritaire(char * nom_fichier, const char * log);
 
 #endif
