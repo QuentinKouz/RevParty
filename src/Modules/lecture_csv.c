@@ -186,7 +186,6 @@ void lire_noms_candidats_csv(const char *nom_fichier, char *noms[], int nb_max) 
                 token = pos_espace + 3;
             noms[i] = malloc(strlen(token) + 1);
             strcpy(noms[i], token);
-            printf("%s\n",noms[i]);
             i++;
         }
         token = strtok(NULL, ",");

@@ -95,4 +95,5 @@ void jugement_majoritaire(char * nom_fichier) {
 
     printf("Mode de scrutin : jugement majoritaire, %d candidats, %d votants\n", nb_candidats, nb_electeurs);
     printf("\tVainqueur = %s mention : %d (%.2f%%)\n", vainqueur.nom, vainqueur.mediane, vainqueur.pourcentage[vainqueur.mediane]);
+    free(candidats);
 }
