@@ -160,7 +160,7 @@ void lecture_csv_score_condorcet(const char *nom_fichier, t_mat_char_star_dyn *m
 }
 
 void lire_noms_candidats_csv(const char *nom_fichier, char *noms[], int nb_max) {
-    FILE *fichier = fopen(nom_fichier, "r");
+    FILE *fichier = fopen(nom_fichier, "r, ccs=UTF-8");
     
     if (fichier == NULL) {
         perror("Erreur lors de l'ouverture du fichier");
@@ -179,8 +179,14 @@ void lire_noms_candidats_csv(const char *nom_fichier, char *noms[], int nb_max) 
 
     while (token != NULL) {
         if (i<nb_max) {
+            char *pos_espace = strchr(token, ' ');//arg int
+             // Si un espace est trouvé, avancer la position du token
+            // pour pointer juste après l'espace
+            if (pos_espace != NULL) 
+                token = pos_espace + 3;
             noms[i] = malloc(strlen(token) + 1);
             strcpy(noms[i], token);
+            printf("%s\n",noms[i]);
             i++;
         }
         token = strtok(NULL, ",");
@@ -190,7 +196,7 @@ void lire_noms_candidats_csv(const char *nom_fichier, char *noms[], int nb_max) 
 }
 
 void lecture_csv_jugement(const char *nom_fichier, Candidat_mention **candidats, int nb_candidats, int nb_electeurs) {
-    FILE *fichier = fopen(nom_fichier, "r");
+    FILE *fichier = fopen(nom_fichier, "r, ccs=UTF-8");
     if (fichier == NULL) {
         perror("Erreur lors de l'ouverture du fichier");
         exit(EXIT_FAILURE);
@@ -204,12 +210,12 @@ void lecture_csv_jugement(const char *nom_fichier, Candidat_mention **candidats,
         exit(EXIT_FAILURE);
     }
 
-    /**candidats = (Candidat_mention *)malloc(nb_candidats * sizeof(Candidat_mention));
+    *candidats = (Candidat_mention *)malloc(nb_candidats * sizeof(Candidat_mention));
     if (*candidats == NULL) {
         perror("Erreur d'allocation de mémoire");
         fclose(fichier);
         exit(EXIT_FAILURE);
-    }*/
+    }
 
     char *noms_burgers[nb_candidats];
     lire_noms_candidats_csv(nom_fichier, &noms_burgers, nb_candidats);

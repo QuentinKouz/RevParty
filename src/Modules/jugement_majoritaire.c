@@ -75,7 +75,7 @@ void jugement_majoritaire(char * nom_fichier) {
     int nb_electeurs = 0;
     int nb_candidats = 0;
     compter_lignes_colonnes_csv(nom_fichier, &nb_electeurs, &nb_candidats);
-    Candidat_mention candidats[nb_candidats];
+    Candidat_mention * candidats;
     
     lecture_csv_jugement(nom_fichier, &candidats, nb_candidats, nb_electeurs);
     afficher_score_jugement(candidats, nb_candidats);
