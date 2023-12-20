@@ -1,4 +1,4 @@
-# Election
+# RevParty
 Projet avancé sur les élections
 Groupe 2: Nicolas Giry, Quentin Kouzmitch, Salim Moussaoui, Maxime Cherraf
 
